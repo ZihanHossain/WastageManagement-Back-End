@@ -1,11 +1,17 @@
 var express = require("express");
 const { validateLogin } = require("../models/loginInfo");
+const { getUserSectionMapping } = require("../models/userSectionMapping");
 var router = express.Router();
 
 router.post("/validate_login_web", async function (req, res, next) {
   try {
     const response = await validateLogin(req);
-    res.send(response);
+    if (response.length > 0) {
+      const mappingResponse = await getUserSectionMapping(response[0]);
+      res.send([response[0], mappingResponse]);
+    } else {
+      res.send(response);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
