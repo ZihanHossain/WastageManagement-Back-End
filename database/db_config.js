@@ -1,7 +1,9 @@
 var config = {
-  user: "Zihan2",
+  user: "zihan",
+  // user: "Zihan2",
   password: "7828",
-  server: "10.12.61.191",
+  server: "10.12.3.182",
+  // server: "10.12.61.195",
   database: "WastageManagement",
   port: 1433,
   options: {
