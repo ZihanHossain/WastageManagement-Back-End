@@ -20,15 +20,29 @@ const getColors = async (req) => {
 const createColor = async (req) => {
   await poolConnect;
   const request = pool.request();
-  let sqlQuery = `INSERT INTO Colors (color_name) VALUES ('${req.body.color}')`;
+  const colorName = req.body.color;
+
+  // Use parameterized query to prevent SQL injection
+  const sqlQuery = `INSERT INTO Colors (color_name) VALUES (@colorName)`;
+
+  request.input("colorName", colorName);
 
   return new Promise((resolve, reject) => {
-    request.query(sqlQuery, function (err, result) {
+    request.query(sqlQuery, (err, result) => {
       if (err) {
-        console.log(err);
-        reject("error");
+        if (err.number === 2627 || err.number === 2601) {
+          // Unique key violation error
+          console.log(`Unique key violation for color_name: ${colorName}`);
+          resolve({ message: "Color already exists", rowsAffected: 0 });
+        } else {
+          console.log(err);
+          reject("error");
+        }
       } else {
-        resolve(result.rowsAffected);
+        resolve({
+          message: "Color created successfully",
+          rowsAffected: result.rowsAffected,
+        });
       }
     });
   });
