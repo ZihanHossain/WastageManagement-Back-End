@@ -18,7 +18,7 @@ const getJobs = async () => {
   const request = pool.request();
 
   let sqlQuery = `SELECT CAST(j.created_date AS DATETIME) as create_date, j.*, s.section_name,
-  t.type_name, a.transferred_to_hr, a.active_qty, li.last_name, li.user_name FROM jobs j INNER JOIN sections s ON s.id = j.section_id
+  t.type_name, a.transferred_to_hr, a.active_qty, li.first_name, li.last_name, li.user_name FROM jobs j INNER JOIN sections s ON s.id = j.section_id
 INNER JOIN wastageTypes t ON t.id = j.type_id INNER JOIN ( SELECT job_id, SUM(transferred_to_hr) AS transferred_to_hr,
     (SUM(qty) - SUM(transferred_to_hr)) AS active_qty FROM jobDetails GROUP BY job_id ) a ON a.job_id = j.id
     LEFT JOIN loginInfo li ON li.id = j.created_by
