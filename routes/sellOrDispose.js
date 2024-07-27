@@ -3,6 +3,7 @@ const { getHrJobPending } = require("../models/common");
 const { getCustomers } = require("../models/customers");
 const { createInvoice } = require("../models/invoices");
 const { createInvoiceDetails } = require("../models/invoiceDetails");
+const { getSections } = require("../models/sections");
 var router = express.Router();
 
 router.get("/get_hr_job_pending", async function (req, res, next) {
@@ -18,6 +19,16 @@ router.get("/get_hr_job_pending", async function (req, res, next) {
 router.post("/get_customers", async function (req, res, next) {
   try {
     const response = await getCustomers(req);
+    res.send(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/get_sections", async function (req, res, next) {
+  try {
+    const response = await getSections();
     res.send(response);
   } catch (error) {
     console.error(error);
