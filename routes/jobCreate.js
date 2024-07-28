@@ -58,15 +58,20 @@ router.post("/get_defects", async function (req, res, next) {
 
 //this API creates the job based on provided data
 router.post("/create_job", async function (req, res, next) {
-  let [rowsAffected, orderId] = await createOrder(req); //rowsEffected stores how many rows were inserted and insertedId stores the last inserted id (order id)
-  if (rowsAffected > 0) {
-    let [rowsAffected, jobId] = await createJob(req, orderId);
+  try {
+    let [rowsAffected, orderId] = await createOrder(req); //rowsEffected stores how many rows were inserted and insertedId stores the last inserted id (order id)
     if (rowsAffected > 0) {
-      let rowsAffected = await createJobDetails(req.body.jobDetails, jobId);
+      let [rowsAffected, jobId] = await createJob(req, orderId);
       if (rowsAffected > 0) {
-        res.status(201).json({ message: "Resource created successfully" });
+        let rowsAffected = await createJobDetails(req.body.jobDetails, jobId);
+        if (rowsAffected > 0) {
+          res.status(201).json({ message: "Resource created successfully" });
+        }
       }
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
