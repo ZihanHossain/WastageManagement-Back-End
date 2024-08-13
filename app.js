@@ -10,6 +10,7 @@ var jobCreateRouter = require("./routes/jobCreate");
 var transferToHrRouter = require("./routes/TransferToHr");
 var sellOrDisposeRouter = require("./routes/sellOrDispose");
 var loginRouter = require("./routes/login");
+var settings = require("./routes/settings");
 
 var app = express();
 
@@ -33,6 +34,7 @@ app.use("/jobCreate", jobCreateRouter);
 app.use("/transferToHr", transferToHrRouter);
 app.use("/sellOrDispose", sellOrDisposeRouter);
 app.use("/login", loginRouter);
+app.use("/settings", settings);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
