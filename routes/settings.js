@@ -10,6 +10,7 @@ const {
   getUserSectionMapping,
   deleteUserSectionMapping,
   addUserSectionMapping,
+  getUserInfo,
 } = require("../models/userSectionMapping");
 var router = express.Router();
 
@@ -27,6 +28,17 @@ router.get("/get_all_sections", async function (req, res, next) {
   try {
     const sections = await getSections();
     res.send(sections);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.post("/get_user_info", async function (req, res, next) {
+  try {
+    const userInfo = await getUserInfo(req.body);
+
+    res.send(userInfo[0]);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -65,6 +77,20 @@ router.post("/update_user", async function (req, res, next) {
       } else {
         res.send("error");
       }
+    } else {
+      res.send("error");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.post("/update_single_user", async function (req, res, next) {
+  try {
+    const updateResult = await updateUser(req.body);
+    if (updateResult > 0) {
+      res.send("success");
     } else {
       res.send("error");
     }

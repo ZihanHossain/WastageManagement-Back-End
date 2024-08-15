@@ -19,6 +19,25 @@ const getUserSectionMapping = async (req) => {
   });
 };
 
+const getUserInfo = async (req) => {
+  await poolConnect;
+
+  const request = pool.request();
+
+  let sqlQuery = `SELECT * FROM loginInfo WHERE id = '${req.id}'`;
+
+  return new Promise((resolve, reject) => {
+    request.query(sqlQuery, async function (err, result) {
+      if (err) {
+        console.log(err);
+        reject("error");
+      } else {
+        resolve(result.recordset);
+      }
+    });
+  });
+};
+
 const deleteUserSectionMapping = async (req) => {
   await poolConnect;
 
@@ -67,4 +86,5 @@ module.exports = {
   getUserSectionMapping,
   deleteUserSectionMapping,
   addUserSectionMapping,
+  getUserInfo,
 };
